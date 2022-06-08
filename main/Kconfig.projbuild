@@ -1,0 +1,39 @@
+menu "NMDA-ESP32 SPECIFICS"
+
+config OTA_URL
+    string "OTA binary file URL"
+    default "https://github.com/diego-acc/Neutron-Monitor-Data-Acquisition/releases/download/latest/main.bin"
+
+config OTA_HASH
+    string "OTA hash file URL"
+    default "https://github.com/diego-acc/Neutron-Monitor-Data-Acquisition/releases/download/latest/hash"
+
+config OTA_TIME
+    string "OTA to verify hash"
+    default "3600"
+
+config WIFI_SSID
+    string "SSID"
+    default "my ssid"
+
+config WIFI_PASSWORD
+    string "PASSWORD"
+    default "my password"
+
+config MQTT_HOST
+    string "BROKER"
+    default "my broker"
+
+config MQTT_PORT
+    string "1883"
+    default "1883"
+
+config MQTT_USER
+    string "MQTT_USER"
+    default "my mqtt user"
+
+config MQTT_PASS
+    string "MQTT_PASS"
+    default "my mqtt pass"
+ 
+endmenu

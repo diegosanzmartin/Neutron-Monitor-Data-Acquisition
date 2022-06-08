@@ -1,0 +1,65 @@
+name: build & release
+
+on:
+    push:
+        tags:
+            - 'v*'
+            - latest
+
+jobs:
+    builder:
+        runs-on: ubuntu-latest
+        container: espressif/idf:v4.4
+        steps:
+          - name: Chechout code
+            uses: actions/checkout@v2
+
+          - name: Build
+            run: |
+                  tar cf - main | sha256sum | cut -d ' ' -f1 > certificate/hash 
+                  echo "${{ secrets.SDKCONFIG }}" | base64 -d | gunzip > sdkconfig
+                  git clone https://github.com/UncleRus/esp-idf-lib $IDF_PATH/esp-idf-lib
+                  . $IDF_PATH/export.sh
+                  idf.py fullclean
+                  idf.py reconfigure
+                  idf.py build
+                  
+          - name: Delete latest release
+            uses: actions/github-script@v4
+            continue-on-error: true
+            with:
+                github-token: ${{ secrets.TOKEN }}
+                script: |
+                    const { owner, repo } = context.repo
+                    const { data: { id } } = await github.repos.getLatestRelease({ owner, repo })
+                    await github.repos.deleteRelease({ owner, repo, release_id: id })
+
+          - name: Create release
+            id: create_release
+            uses: actions/create-release@v1
+            env:
+                  GITHUB_TOKEN: ${{ secrets.TOKEN }}
+            with:
+                  tag_name: ${{ github.ref }}
+                  release_name: Release ${{ github.ref }}
+
+          - name: Upload bin
+            uses: actions/upload-release-asset@v1
+            env:
+                  GITHUB_TOKEN: ${{ secrets.TOKEN }}
+            with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./build/main.bin
+                  asset_name: main.bin
+                  asset_content_type: application/octet-stream
+
+          - name: Upload hash
+            uses: actions/upload-release-asset@v1
+            env:
+                  GITHUB_TOKEN: ${{ secrets.TOKEN }}
+            with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./certificate/hash
+                  asset_name: hash
+                  asset_content_type: application/octet-stream
+
