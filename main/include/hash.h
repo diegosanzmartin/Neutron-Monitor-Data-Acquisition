@@ -1,1 +1,0 @@
-#define BIN_HASH "4604617f784b5c7f67a8c77cd90915e2438aa9cdc52d87eb01bf2d2aad154fc7"
