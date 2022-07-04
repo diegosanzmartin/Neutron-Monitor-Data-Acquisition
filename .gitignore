@@ -58,4 +58,3 @@ build
 secret
 sdkconfig
 sdkconfig.old
-certificate/hash
