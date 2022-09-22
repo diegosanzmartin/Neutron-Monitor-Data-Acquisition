@@ -51,8 +51,8 @@ void mqtt_setup() {
     ESP_LOGI("MQTT","INIT CLIENT");
     esp_mqtt_client_config_t mqttConfig = {
       .host = CONFIG_MQTT_HOST,
-      .username = CONFIG_MQTT_USER,
-      .password = CONFIG_MQTT_PASS,
+      //.username = CONFIG_MQTT_USER,
+      //.password = CONFIG_MQTT_PASS,
       .port = atoi(CONFIG_MQTT_PORT),
     };
 
@@ -64,22 +64,5 @@ void mqtt_setup() {
 }
 
 void mqtt_send_mss(char* topic, char* mss) {
-    esp_mqtt_client_publish(client, topic, mss, strlen(mss), 2, false);
-}
-
-int mqtt_logging(const char *fmt, va_list l) {
-    struct timeval tv_now;
-	struct telemetry_message message;
-    message.tm_message_type = TM_LOG;
-
-    vsprintf(message.payload.tm_log.log, fmt, l);
-
-    gettimeofday(&tv_now, NULL);
-    int64_t time_us = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
-    message.timestamp = time_us;
-    xQueueSend(telemetry_queue, &message, portMAX_DELAY);
-
-    vprintf(fmt, l);
-
-    return 0;
+    esp_mqtt_client_publish(client, topic, mss, 0, 0, false);
 }

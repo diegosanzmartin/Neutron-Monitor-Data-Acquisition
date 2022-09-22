@@ -21,7 +21,7 @@ void mss_sender(void *parameters) {
                         message.payload.tm_meteo.atm_pressure_hpas
                 );
 
-		        mqtt_send_mss("calma/nemo/meteo", buffer);
+		        mqtt_send_mss("calma/nemo/bp28", buffer);
 		        ESP_LOGI("MSS_SEND", "Publishing METEO");
 			    break;
 
@@ -34,7 +34,7 @@ void mss_sender(void *parameters) {
                     message.payload.tm_pcnt.integration_time_sec
                 );
 
-		        mqtt_send_mss("calma/nemo/pcnt", buffer);
+		        mqtt_send_mss("calma/nemo/bp28", buffer);
 		        ESP_LOGI("MSS_SEND", "Publishing PULSECOUNT");
 			    break;
 
@@ -46,17 +46,17 @@ void mss_sender(void *parameters) {
                     message.payload.tm_detect.channel[2]
                 );
 
-		        mqtt_send_mss("calma/nemo/detect", buffer);
-		        ESP_LOGI("MSS_SEND", "Publishing DETECTOR");
+		        mqtt_send_mss("calma/nemo/bp28", buffer);
+		        //ESP_LOGI("MSS_SEND", "Publishing DETECTOR");
 			    break;
 
 
-            case TM_LOG:
-                sprintf(buffer, "{ \"datetime\": \"%lld\", \"log\": \"%s\" }",
+            case TM_TIME_SYNCHRONIZER:
+                sprintf(buffer, "{ \"datetime\": \"%lld\", \"cpu_lnd\": \"%zu\" }",
                     message.timestamp,
-                    message.payload.tm_log.log
+                    message.payload.tm_sync.cpu_count
                 );
-                mqtt_send_mss("calma/nemo/log", buffer);
+                mqtt_send_mss("calma/nemo/bp28", buffer);
                 break;
 
 			default:
