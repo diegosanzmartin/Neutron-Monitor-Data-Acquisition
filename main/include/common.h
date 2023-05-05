@@ -9,15 +9,15 @@ void task_meteo(void *parameters);
 //OTA
 void task_ota(void *parameters);
 
-//LOG
-int mqtt_logging(const char *fmt, va_list l);
-
 //MSS SENDER
 void mss_sender(void *parameters);
 
 //PULSE
 void task_pcnt(void *parameters);
 void task_detection(void *parameters);
+
+//INFO
+void info(void);
 
 //SET UP
 void init_GPIO(void);

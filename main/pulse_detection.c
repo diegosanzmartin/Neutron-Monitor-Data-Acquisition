@@ -4,7 +4,6 @@ void IRAM_ATTR detection_isr_handler(void* arg) {
     struct telemetry_message message;
 
     message.timestamp = xthal_get_ccount();
-
     message.tm_message_type = TM_PULSE_DETECTION;
 
     message.payload.tm_detect.channel[0] = gpio_get_level(PIN_PULSE_IN_CH1);

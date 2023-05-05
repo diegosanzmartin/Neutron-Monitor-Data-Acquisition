@@ -18,14 +18,15 @@ void app_main(void) {
     wifi_semaphore = xSemaphoreCreateBinary();
     sntp_semaphore = xSemaphoreCreateBinary();
     mqtt_semaphore = xSemaphoreCreateBinary();
+    dtct_semaphore = xSemaphoreCreateBinary();
 
     wifi_setup();
+    xTaskCreatePinnedToCore(&task_ota, "OTA handling", 1024 * 8, NULL, 5, NULL, 0);
+    
     sntp_setup();
-
     init_GPIO();
 
     xTaskCreatePinnedToCore(&mss_sender, "Send message", 1024 * 3, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(&task_pcnt, "Pulse counter", 1024 * 3, NULL, 1, NULL, 1);
     xTaskCreatePinnedToCore(&task_meteo, "Meteo data handling", 1024 * 3, NULL, 5, NULL, 0);
-    xTaskCreatePinnedToCore(&task_ota, "OTA handling", 1024 * 8, NULL, 5, NULL, 0);
 }

@@ -59,22 +59,24 @@ void task_pcnt(void *parameters) {
     while (true) {
 
     	count[0] = get_and_clear(PCNT_UNIT_0);
-        ESP_LOGI("MONITOR", "CH1: %d pulses per %d secs", count[0], count_time_secs);
+      ESP_LOGI("MONITOR", "CH1: %d pulses per %d secs", count[0], count_time_secs);
 
-        count[1] = get_and_clear(PCNT_UNIT_1);
-        ESP_LOGI("MONITOR", "CH2: %d pulses per %d secs", count[1], count_time_secs);
+      count[1] = get_and_clear(PCNT_UNIT_1);
+      ESP_LOGI("MONITOR", "CH2: %d pulses per %d secs", count[1], count_time_secs);
 
-        count[2] = get_and_clear(PCNT_UNIT_2);
-        ESP_LOGI("MONITOR", "CH3: %d pulses per %d secs", count[2], count_time_secs);
+      count[2] = get_and_clear(PCNT_UNIT_2);
+      ESP_LOGI("MONITOR", "CH3: %d pulses per %d secs", count[2], count_time_secs);
 
-        message.payload.tm_pcnt.integration_time_sec = count_time_secs;
+      message.payload.tm_pcnt.integration_time_sec = count_time_secs;
     	message.payload.tm_pcnt.channel[0] = count[0];
     	message.payload.tm_pcnt.channel[1] = count[1];
     	message.payload.tm_pcnt.channel[2] = count[2];
 
-        gettimeofday(&tv_now, NULL);
+      gettimeofday(&tv_now, NULL);
         int64_t time_us = (int64_t)tv_now.tv_sec * 1000000L + (int64_t)tv_now.tv_usec;
         message.timestamp = time_us;
+        message.payload.tm_pcnt.sync_time = xthal_get_ccount();
+        
         xQueueSend(telemetry_queue, &message, portMAX_DELAY);
 
         time(&now);

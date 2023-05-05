@@ -2,11 +2,11 @@ menu "NMDA-ESP32 SPECIFICS"
 
 config OTA_URL
     string "OTA binary file URL"
-    default "https://github.com/diego-acc/Neutron-Monitor-Data-Acquisition/releases/download/latest/main.bin"
+    default "url ota binary"
 
 config OTA_HASH
     string "OTA hash file URL"
-    default "https://github.com/diego-acc/Neutron-Monitor-Data-Acquisition/releases/download/latest/hash"
+    default "url ota hash"
 
 config OTA_TIME
     string "OTA to verify hash"

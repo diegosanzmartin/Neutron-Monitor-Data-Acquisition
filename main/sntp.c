@@ -23,7 +23,8 @@ void on_got_time(struct timeval *tv) {
 void sntp_setup(void) {
     ESP_LOGI("SNTP", "setup init");
     sntp_set_sync_mode(SNTP_SYNC_MODE_IMMED);
-    sntp_setservername(0, "pool.ntp.org");
+    sntp_setservername(0, "192.168.1.16");
+    sntp_setservername(1, "pool.ntp.org");
     sntp_init();
     sntp_set_time_sync_notification_cb(on_got_time);
     ESP_LOGI("SNTP", "setup finished");
